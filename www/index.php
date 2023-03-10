@@ -30,17 +30,8 @@ function saveSession($filePath, $session) {
     fclose($fp);
 }
 
+include "../inc/header.html";
 
-?><!DOCTYPE html>
-<html>
-    <head>
-        <title>Soccer session</title>
-        <link rel="stylesheet" type="text/css" href="style.css"/>
-        <link rel="icon" href="/favicon.png"/>
-        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    </head>
-    <body>
-<?php
 // Load authorized users
 $users = json_decode(file_get_contents("../users.json"), true);
 
@@ -168,5 +159,4 @@ if (in_array($userId, $players) || in_array($userId, $waitingPlayers)) {
     echo '</form>';
 }
 
-?></body>
-</html>
+include "../inc/footer.html";
