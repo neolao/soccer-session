@@ -6,5 +6,56 @@
     "59a64778-7486-4669-83c6-8da397eba3f6": {
         "name": "Olivier",
         "type": "admin"
+    },
+    "a": {
+        "name": "Player A"
+    },
+    "b": {
+        "name": "Player B"
+    },
+    "c": {
+        "name": "Player C"
+    },
+    "d": {
+        "name": "Player D"
+    },
+    "e": {
+        "name": "Player E"
+    },
+    "f": {
+        "name": "Player F"
+    },
+    "g": {
+        "name": "Player G"
+    },
+    "h": {
+        "name": "Player H"
+    },
+    "i": {
+        "name": "Player I"
+    },
+    "j": {
+        "name": "Player J"
+    },
+    "k": {
+        "name": "Player K"
+    },
+    "l": {
+        "name": "Player L"
+    },
+    "m": {
+        "name": "Player M"
+    },
+    "n": {
+        "name": "Player N"
+    },
+    "o": {
+        "name": "Player O"
+    },
+    "p": {
+        "name": "Player P"
+    },
+    "q": {
+        "name": "Player Q"
     }
 }

@@ -3,6 +3,22 @@ const MAX_PLAYERS = 10;
 const MAX_WAITING_PLAYERS = 4;
 
 // Functions
+function getSession($filePath) {
+    $size = filesize($filePath);
+    $fp = fopen($filePath, "r");
+    $content = fread($fp, $size);
+    fclose($fp);
+
+    $session = json_decode($content, true);
+    if (json_last_error() != JSON_ERROR_NONE) {
+        $session = array(
+            "players" => array(),
+            "waiting" => array()
+        );
+    }
+
+    return $session;
+}
 function saveSession($filePath, $session) {
     $fp = fopen($filePath, "w+");
     if (flock($fp, LOCK_EX)) {
@@ -14,12 +30,22 @@ function saveSession($filePath, $session) {
     fclose($fp);
 }
 
+
+?><!DOCTYPE html>
+<html>
+    <head>
+        <title>Soccer session</title>
+        <link rel="stylesheet" type="text/css" href="style.css"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    </head>
+    <body>
+<?php
 // Load authorized users
 $users = json_decode(file_get_contents("./users.json"), true);
 
 // Check the user
 $userId = null;
-if (isset($_COOKIE["user"])) {
+if (isset($_COOKIE["user"]) && !isset($_GET["user"])) {
     $userId = $_COOKIE["user"];
 } elseif (isset($_GET["user"])) {
     $userId = $_GET["user"];
@@ -43,14 +69,7 @@ if (!file_exists($sessionFilePath)) {
     echo "The session doesn't exist";
     exit(1);
 }
-$sessionContent = file_get_contents($sessionFilePath);
-$session = json_decode($sessionContent, true);
-if (json_last_error() != JSON_ERROR_NONE) {
-    $session = array(
-        "players" => array(),
-        "waiting" => array()
-    );
-}
+$session = getSession($sessionFilePath);
 $players = &$session["players"];
 $waitingPlayers = &$session["waiting"];
 
@@ -76,18 +95,21 @@ if (isset($_POST["action"]) && $_POST["action"] === "unbook") {
             global $userId;
             return $element !== $userId;
         });
+        $players = array_values($players);
     }
     // Remove from waiting list
     if (in_array($userId, $waitingPlayers)) {
-        $waiting = array_filter($waitingPlayers, function ($element) {
+        $waitingPlayers = array_filter($waitingPlayers, function ($element) {
             global $userId;
             return $element !== $userId;
         });
+        $waitingPlayers = array_values($waitingPlayers);
     }
     // Put user from waiting list to player list
     if (count($players) < MAX_PLAYERS) {
         if (count($waitingPlayers) > 0) {
             array_push($players, array_shift($waitingPlayers));
+            $waitingPlayers = array_values($waitingPlayers);
         }
     }
 
@@ -98,26 +120,34 @@ if (isset($_POST["action"]) && $_POST["action"] === "unbook") {
 }
 
 // Players
-echo '<h2>Players</h2>';
 echo '<table>';
-echo '<thead><tr><th>Name</th></tr></thead>';
+echo '<thead><tr><th>Players</th></tr></thead>';
 echo '<tbody>';
-foreach ($players as $playerId) {
+for ($index = 0; $index < MAX_PLAYERS; $index++) {
     echo '<tr>';
-    echo '<td>' . $users[$playerId]["name"] . '</td>';
+    if (isset($players[$index])) {
+        $playerId = $players[$index];
+        echo '<td>' . $users[$playerId]["name"] . '</td>';
+    } else {
+        echo '<td></td>';
+    }
     echo '</tr>';
 }
 echo '</tbody>';
 echo '</table>';
 
 // Waiting players
-echo '<h2>Waiting players</h2>';
 echo '<table>';
-echo '<thead><tr><th>Name</th></tr></thead>';
+echo '<thead><tr><th>Waiting players</th></tr></thead>';
 echo '<tbody>';
-foreach ($waitingPlayers as $playerId) {
+for ($index = 0; $index < MAX_WAITING_PLAYERS; $index++) {
     echo '<tr>';
-    echo '<td>' . $users[$playerId]["name"] . '</td>';
+    if (isset($waitingPlayers[$index])) {
+        $playerId = $waitingPlayers[$index];
+        echo '<td>' . $users[$playerId]["name"] . '</td>';
+    } else {
+        echo '<td></td>';
+    }
     echo '</tr>';
 }
 echo '</tbody>';
@@ -136,3 +166,6 @@ if (in_array($userId, $players) || in_array($userId, $waitingPlayers)) {
     echo '<input type="submit" value="Book"/>';
     echo '</form>';
 }
+
+?></body>
+</html>
