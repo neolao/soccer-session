@@ -41,7 +41,7 @@ function saveSession($filePath, $session) {
     <body>
 <?php
 // Load authorized users
-$users = json_decode(file_get_contents("./users.json"), true);
+$users = json_decode(file_get_contents("../users.json"), true);
 
 // Check the user
 $userId = null;
@@ -64,7 +64,7 @@ if (!isset($_GET["date"])) {
     exit(1);
 }
 $date = $_GET["date"];
-$sessionFilePath = __DIR__ . "/" . $date . ".json";
+$sessionFilePath = __DIR__ . "/../sessions/" . $date . ".json";
 if (!file_exists($sessionFilePath)) {
     echo "The session doesn't exist";
     exit(1);

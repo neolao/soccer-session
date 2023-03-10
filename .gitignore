@@ -1,3 +1,2 @@
-*.json
+sessions/*.json
 users.json
-!users.dist.json
