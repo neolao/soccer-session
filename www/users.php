@@ -14,51 +14,71 @@ if (!isAdmin($user)) {
     die();
 }
 
-// Handle form to disable a user
-if (isset($_POST["action"]) && $_POST["action"] === "disable") {
-    $targetUserId = $_POST["target"];
-    disableUser($targetUserId);
-    $users = getUsers();
-}
-
-// Handle form to enable a user
-if (isset($_POST["action"]) && $_POST["action"] === "enable") {
-    $targetUserId = $_POST["target"];
-    enableUser($targetUserId);
-    $users = getUsers();
-}
-
 // Header
 include "../inc/header.html";
 generateMenu($user, PAGE_USERS);
 
 echo '<main>';
 
-echo '<table class="users">';
-echo '<thead><tr><th>ID</th><th>Name</th><th>Tickets</th><th>Type</th><th>Status</th></tr></thead>';
-echo '<tbody>';
-foreach ($users as $u) {
-    $status = $u["enabled"]?"Enabled":"Disabled";
-    echo '<tr>';
-    echo '<td>' . $u["id"] . '</td>';
-    echo '<td>' . $u["name"] . '</td>';
-    echo '<td></td>';
-    echo '<td>' . $u["type"] . '</td>';
+// Handle form to add a ticket
+if (isset($_POST["action"]) && $_POST["action"] === "addTicket") {
+    $targetUserId = $_POST["target"];
+    addTicket($targetUserId);
+    $users = getUsers();
+}
 
-    // Status
-    echo '<td>' . $status;
+// Handle form to remove a ticket
+if (isset($_POST["action"]) && $_POST["action"] === "removeTicket") {
+    $targetUserId = $_POST["target"];
+    removeTicket($targetUserId);
+    $users = getUsers();
+}
+
+
+$enabledUsers = array();
+$disabledUsers = array();
+foreach ($users as $u) {
+    if ($u["enabled"]) {
+        array_push($enabledUsers, $u);
+    } else {
+        array_push($disabledUsers, $u);
+    }
+}
+
+echo '<h1>Enabled users</h1>';
+echo '<table class="users">';
+echo '<thead><tr><th>Name</th><th>Tickets</th></tr></thead>';
+echo '<tbody>';
+foreach ($enabledUsers as $u) {
+    echo '<tr>';
+    echo '<td><a href="/user.php?id='.$u["id"].'">' . $u["name"] . '</a></td>';
+    echo '<td>';
     echo '<form action="" method="post">';
     echo '<input type="hidden" name="target" value="'.$u["id"].'"/>';
-    if ($u["enabled"]) {
-        echo '<input type="hidden" name="action" value="disable"/>';
-        echo '<input type="submit" value="Disable"/>';
-        echo '</form>';
-    } else {
-        echo '<input type="hidden" name="action" value="enable"/>';
-        echo '<input type="submit" value="Enable"/>';
-    }
+    echo '<input type="hidden" name="action" value="removeTicket"/>';
+    echo '<input type="submit" value="-"/>';
+    echo '</form>';
+    echo $u["tickets"];
+    echo '<form action="" method="post">';
+    echo '<input type="hidden" name="target" value="'.$u["id"].'"/>';
+    echo '<input type="hidden" name="action" value="addTicket"/>';
+    echo '<input type="submit" value="+"/>';
     echo '</form>';
     echo '</td>';
+echo '</form>';
+
+    echo '</tr>';
+}
+echo '</tbody>';
+echo '</table>';
+
+echo '<h1>Disabled users</h1>';
+echo '<table class="users">';
+echo '<thead><tr><th>Name</th></tr></thead>';
+echo '<tbody>';
+foreach ($disabledUsers as $u) {
+    echo '<tr>';
+    echo '<td><a href="/user.php?id='.$u["id"].'">' . $u["name"] . '</a></td>';
     echo '</tr>';
 }
 echo '</tbody>';

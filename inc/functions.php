@@ -7,6 +7,8 @@ include_once(__DIR__ . "/functions/saveSession.php");
 include_once(__DIR__ . "/functions/getUsers.php");
 include_once(__DIR__ . "/functions/enableUser.php");
 include_once(__DIR__ . "/functions/disableUser.php");
+include_once(__DIR__ . "/functions/addTicket.php");
+include_once(__DIR__ . "/functions/removeTicket.php");
 include_once(__DIR__ . "/functions/authenticate.php");
 include_once(__DIR__ . "/functions/generateMenu.php");
 include_once(__DIR__ . "/functions/isAdmin.php");

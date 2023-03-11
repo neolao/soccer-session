@@ -26,6 +26,9 @@ function getUsers() {
         if (!isset($user["enabled"])) {
             $user["enabled"] = true;
         }
+        if (!isset($user["tickets"])) {
+            $user["tickets"] = 0;
+        }
     }
 
     return $users;

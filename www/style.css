@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Rajdhani:wght@500&display=swap');
+
 html, body {
     margin: 0;
     padding: 0;
@@ -9,7 +11,8 @@ menu {
     padding: 0;
     list-style: none;
     background: #339;
-    font-size: 20px;
+    font-family: Rajdhani, sans-serif;
+    font-size: 18px;
 }
 menu li {
     padding: .2em 1em;
@@ -30,9 +33,13 @@ main {
 }
 
 table {
-    border: solid 1px #000;
     margin-bottom: 1em;
-    width: 14em;
+    width: auto;
+}
+th {
+    padding: .1em 1em;
+    text-align: left;
+    border-bottom: solid 1px #000;
 }
 @media screen and (max-width: 14em) {
     table {
@@ -42,9 +49,9 @@ table {
 table.users {
     width: 100%;
 }
-tr, td {
+td {
     height: 1em;
-    border: solid 1px #000;
+    border-bottom: dashed 1px #ccc;
 }
 td form {
     display: inline-block;

@@ -31,6 +31,10 @@ if (isAdmin($user) && isset($_POST["action"]) && $_POST["action"] === "delete") 
     die();
 }
 
+// Handle form to close the session
+if (isAdmin($user) && isset($_POST["action"]) && $_POST["action"] === "close") {
+}
+
 // Handle form to book
 if (isset($_POST["action"]) && $_POST["action"] === "book") {
     if (count($players) < MAX_PLAYERS) {
@@ -42,12 +46,8 @@ if (isset($_POST["action"]) && $_POST["action"] === "book") {
     $players = array_unique($players);
     $waitingPlayers = array_unique($waitingPlayers);
 
-    saveSession($sessionFilePath, json_encode($session));
+    saveSession($sessionFilePath, json_encode($session, JSON_PRETTY_PRINT));
 }
-
-// Header
-include "../inc/header.html";
-generateMenu($user, PAGE_SESSION);
 
 // Handle form to unbook
 if (isset($_POST["action"]) && $_POST["action"] === "unbook") {
@@ -78,23 +78,34 @@ if (isset($_POST["action"]) && $_POST["action"] === "unbook") {
     $players = array_unique($players);
     $waitingPlayers = array_unique($waitingPlayers);
 
-    saveSession($sessionFilePath, json_encode($session));
+    saveSession($sessionFilePath, json_encode($session, JSON_PRETTY_PRINT));
 }
+
+// Header
+include "../inc/header.html";
+generateMenu($user, PAGE_SESSION);
 
 echo '<main>';
 
 // Players
 echo '<table>';
-echo '<thead><tr><th>Players</th></tr></thead>';
+echo '<thead><tr><th>Players</th><th>Ticket</th></tr></thead>';
 echo '<tbody>';
 for ($index = 0; $index < MAX_PLAYERS; $index++) {
     echo '<tr>';
     if (isset($players[$index])) {
         $playerId = $players[$index];
         echo '<td>' . $users[$playerId]["name"] . '</td>';
+        if ($users[$playerId]["tickets"] > 0) {
+            echo '<td>OK</td>';
+        } else {
+            echo '<td></td>';
+        }
     } else {
         echo '<td></td>';
+        echo '<td></td>';
     }
+
     echo '</tr>';
 }
 echo '</tbody>';
@@ -109,9 +120,16 @@ for ($index = 0; $index < MAX_WAITING_PLAYERS; $index++) {
     if (isset($waitingPlayers[$index])) {
         $playerId = $waitingPlayers[$index];
         echo '<td>' . $users[$playerId]["name"] . '</td>';
+        if ($users[$playerId]["tickets"] > 0) {
+            echo '<td>OK</td>';
+        } else {
+            echo '<td></td>';
+        }
     } else {
         echo '<td></td>';
+        echo '<td></td>';
     }
+
     echo '</tr>';
 }
 echo '</tbody>';
@@ -136,14 +154,21 @@ if (in_array($userId, $players) || in_array($userId, $waitingPlayers)) {
 echo '</div>';
 
 if (isAdmin($user)) {
-    echo '<div class="admin">';
-
     // Form to delete the session
+    echo '<div class="admin">';
     echo '<form action="" method="post">';
     echo '<input type="hidden" name="action" value="delete"/>';
     echo '<input type="submit" value="Delete"/>';
     echo '</form>';
-
     echo '</div>';
+
+    // Form to close the session
+    echo '<div class="admin">';
+    echo '<form action="" method="post">';
+    echo '<input type="hidden" name="action" value="close"/>';
+    echo '<input type="submit" value="Close and consume tickets"/>';
+    echo '</form>';
+    echo '</div>';
+
 }
 include "../inc/footer.html";
