@@ -6,3 +6,6 @@ const PAGE_USERS = "users";
 
 const SESSION_STATUS_OPEN = "open";
 const SESSION_STATUS_CLOSED = "closed";
+
+const MAX_PLAYERS = 10;
+const MAX_WAITING_PLAYERS = 4;

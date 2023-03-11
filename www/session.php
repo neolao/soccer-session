@@ -1,10 +1,6 @@
 <?php
-const MAX_PLAYERS = 10;
-const MAX_WAITING_PLAYERS = 4;
-
 include "../inc/constants.php";
 include "../inc/functions.php";
-include "../inc/header.html";
 
 // Load authorized users
 $users = getUsers();
@@ -12,8 +8,6 @@ $users = getUsers();
 // Authentication
 $user = authenticate($users);
 $userId = $user["id"];
-
-
 
 // Load the session
 if (!isset($_GET["date"])) {
@@ -51,7 +45,8 @@ if (isset($_POST["action"]) && $_POST["action"] === "book") {
     saveSession($sessionFilePath, json_encode($session));
 }
 
-// Menu
+// Header
+include "../inc/header.html";
 generateMenu($user, PAGE_SESSION);
 
 // Handle form to unbook

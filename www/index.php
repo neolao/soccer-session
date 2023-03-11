@@ -1,10 +1,6 @@
 <?php
-const MAX_PLAYERS = 10;
-const MAX_WAITING_PLAYERS = 4;
-
 include "../inc/constants.php";
 include "../inc/functions.php";
-include "../inc/header.html";
 
 // Load authorized users
 $users = getUsers();
@@ -13,14 +9,15 @@ $users = getUsers();
 $user = authenticate($users);
 $userId = $user["id"];
 
-// Menu
-generateMenu($user, PAGE_SESSIONS);
-
 // Handle form to add a session
 if (isAdmin($user) && isset($_POST["action"]) && $_POST["action"] === "add") {
     $baseName = $_POST["date"];
     addSession($baseName);
 }
+
+// Header
+include "../inc/header.html";
+generateMenu($user, PAGE_SESSIONS);
 
 echo '<main>';
 

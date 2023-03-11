@@ -9,6 +9,7 @@ menu {
     padding: 0;
     list-style: none;
     background: #339;
+    font-size: 20px;
 }
 menu li {
     padding: .2em 1em;
@@ -38,9 +39,16 @@ table {
         width: 100%;
     }
 }
+table.users {
+    width: 100%;
+}
 tr, td {
     height: 1em;
     border: solid 1px #000;
+}
+td form {
+    display: inline-block;
+    margin: 0 1em 0 1em;
 }
 
 .actions {
