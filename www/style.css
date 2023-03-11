@@ -1,13 +1,39 @@
-h1 {
-    border-bottom: solid 1px #000;
+html, body {
+    margin: 0;
+    padding: 0;
+}
+
+menu {
+    display: flex;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    background: #339;
+}
+menu li {
+    padding: .2em 1em;
+    color: #fff;
+    cursor: pointer;
+}
+menu li.selected {
+    background: #fff;
+    color: #339;
+}
+menu a {
+    color: inherit;
+    text-decoration: none;
+}
+
+main {
+    padding: 1em;
 }
 
 table {
     border: solid 1px #000;
     margin-bottom: 1em;
-    width: 12em;
+    width: 14em;
 }
-@media screen and (max-width: 12em) {
+@media screen and (max-width: 14em) {
     table {
         width: 100%;
     }
@@ -15,4 +41,16 @@ table {
 tr, td {
     height: 1em;
     border: solid 1px #000;
+}
+
+.actions {
+    margin: 1em;
+    padding: 1em;
+    border: solid 1px #000;
+}
+.admin {
+    margin: 1em;
+    padding: 1em;
+    border: solid 1px #000;
+    background: #933;
 }

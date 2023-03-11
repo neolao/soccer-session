@@ -1,17 +1,30 @@
 <?php
 function getSession($filePath) {
     $size = filesize($filePath);
-    $fp = fopen($filePath, "r");
-    $content = fread($fp, $size);
-    fclose($fp);
-
-    $session = json_decode($content, true);
-    if (json_last_error() != JSON_ERROR_NONE) {
-        $session = array(
-            "players" => array(),
-            "waiting" => array()
-        );
+    if ($size > 0) {
+        $fp = fopen($filePath, "r");
+        $content = fread($fp, $size);
+        fclose($fp);
+        $session = json_decode($content, true);
     }
+
+    if (!isset($session) || !is_array($session)) {
+        $session = array();
+    }
+
+    if (!isset($session["status"])) {
+        $session["status"] = SESSION_STATUS_OPEN;
+    }
+    if (!isset($session["players"])) {
+        $session["players"] = array();
+    }
+    if (!isset($session["waiting"])) {
+        $session["waiting"] = array();
+    }
+
+    $baseName = basename($filePath, ".json");
+    $session["baseName"] = $baseName;
+    $session["timestamp"] = strtotime($baseName);
 
     return $session;
 }
