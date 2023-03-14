@@ -5,16 +5,14 @@ function unbookPlayer(&$session, $userId) {
 
     // Remove from players
     if (in_array($userId, $players)) {
-        $players = array_filter($players, function ($element) {
-            global $userId;
+        $players = array_filter($players, function ($element) use ($userId) {
             return $element !== $userId;
         });
         $players = array_values($players);
     }
     // Remove from waiting list
     if (in_array($userId, $waitingPlayers)) {
-        $waitingPlayers = array_filter($waitingPlayers, function ($element) {
-            global $userId;
+        $waitingPlayers = array_filter($waitingPlayers, function ($element) use ($userId) {
             return $element !== $userId;
         });
         $waitingPlayers = array_values($waitingPlayers);

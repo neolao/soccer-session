@@ -23,6 +23,7 @@ if (!file_exists($sessionFilePath)) {
 $session = getSession($sessionFilePath);
 $players = &$session["players"];
 $waitingPlayers = &$session["waiting"];
+$guests = &$session["guests"];
 
 // Handle form to delete the session
 if (isAdmin($user) && isset($_POST["action"]) && $_POST["action"] === "delete") {
@@ -60,6 +61,10 @@ if (isAdmin($user) && isset($_POST["action"]) && $_POST["action"] === "bookPlaye
     bookPlayer($session, $_POST["id"]);
     saveSession($sessionFilePath, json_encode($session, JSON_PRETTY_PRINT));
 }
+if (isAdmin($user) && isset($_POST["action"]) && $_POST["action"] === "addGuest") {
+    bookGuest($session, $_POST["name"]);
+    saveSession($sessionFilePath, json_encode($session, JSON_PRETTY_PRINT));
+}
 
 // Handle form to unbook
 if (isset($_POST["action"]) && $_POST["action"] === "unbook") {
@@ -93,8 +98,8 @@ for ($index = 0; $index < MAX_PLAYERS; $index++) {
     echo '<tr>';
     if (isset($players[$index])) {
         $playerId = $players[$index];
-        echo '<td>' . $users[$playerId]["name"] . '</td>';
-        if ($users[$playerId]["tickets"] > 0 || in_array($playerId, $session["consumedPlayerTickets"])) {
+        echo '<td>' . getPlayerName($playerId, $users) . '</td>';
+        if (getPlayerTickets($playerId, $users) > 0 || in_array($playerId, $session["consumedPlayerTickets"])) {
             echo '<td>OK</td>';
         } else {
             echo '<td></td>';
@@ -117,8 +122,8 @@ for ($index = 0; $index < MAX_WAITING_PLAYERS; $index++) {
     echo '<tr>';
     if (isset($waitingPlayers[$index])) {
         $playerId = $waitingPlayers[$index];
-        echo '<td>' . $users[$playerId]["name"] . '</td>';
-        if ($users[$playerId]["tickets"] > 0) {
+        echo '<td>' . getPlayerName($playerId, $users) . '</td>';
+        if (getPlayerTickets($playerId, $users) > 0) {
             echo '<td>OK</td>';
         } else {
             echo '<td></td>';
@@ -181,6 +186,15 @@ if (isAdmin($user)) {
     }
     echo '</select></label>';
     echo '<input type="submit" value="Unbook"/>';
+    echo '</form>';
+    echo '</div>';
+
+    // Add a guest
+    echo '<div class="actions admin">';
+    echo '<form action="" method="post">';
+    echo '<input type="hidden" name="action" value="addGuest"/>';
+    echo '<label>Guest: <input type="text" name="name" value="" required/></label>';
+    echo '<input type="submit" value="Add guest"/>';
     echo '</form>';
     echo '</div>';
 
