@@ -52,6 +52,15 @@ if (isAdmin($user) && isset($_POST["action"]) && $_POST["action"] === "consumeTi
     $users = getUsers();
 }
 
+// Handle form to close session and consume tickets
+if (isAdmin($user) && isset($_POST["action"]) && $_POST["action"] === "closeAndConsumeTickets") {
+    closeSession($session);
+    markPlayerTicketAsConsumed($session, $users);
+    consumeTickets($session);
+    saveSession($sessionFilePath, json_encode($session, JSON_PRETTY_PRINT));
+    $users = getUsers();
+}
+
 // Handle form to book
 if (isset($_POST["action"]) && $_POST["action"] === "book") {
     bookPlayer($session, $userId);
@@ -211,6 +220,12 @@ if (isAdmin($user)) {
         echo '<form action="" method="post">';
         echo '<input type="hidden" name="action" value="close"/>';
         echo '<input type="submit" value="Close"/>';
+        echo '</form>';
+
+        // Form to close the session and consume tickets
+        echo '<form action="" method="post">';
+        echo '<input type="hidden" name="action" value="closeAndConsumeTickets"/>';
+        echo '<input type="submit" value="Close and consume tickets"/>';
         echo '</form>';
     } else {
         // Form to open the session
