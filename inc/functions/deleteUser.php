@@ -1,5 +1,5 @@
 <?php
-function removeTicket($id) {
+function deleteUser($id) {
     $filePath = __DIR__ . "/../../users.json";
 
     $size = filesize($filePath);
@@ -8,16 +8,16 @@ function removeTicket($id) {
         $content = fread($fp, $size);
         $users = json_decode($content, true);
 
-        foreach ($users as $userId => &$user) {
-            if ($userId === $id) {
-                $tickets = isset($user["tickets"])?$user["tickets"]:0;
-                $user["tickets"] = $tickets - 1;
+        $newUsers = array();
+        foreach ($users as $userId => $user) {
+            if ($userId !== $id) {
+                $newUsers[$userId] = $user;
             }
         }
 
         ftruncate($fp, 0);
         fseek($fp, 0);
-        fwrite($fp, json_encode($users, JSON_PRETTY_PRINT));
+        fwrite($fp, json_encode($newUsers, JSON_PRETTY_PRINT));
         fflush($fp);
         flock($fp, LOCK_UN);
     }

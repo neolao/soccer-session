@@ -44,6 +44,13 @@ if (isset($_POST["action"]) && $_POST["action"] === "removeTicket") {
     $users = getUsers();
 }
 
+// Handle form to delete the user
+if (isset($_POST["action"]) && $_POST["action"] === "delete") {
+    deleteUser($targetUserId);
+    header('Location: /users.php');
+    die();
+}
+
 // Get the target user
 $targetUser = $users[$_GET["id"]];
 
@@ -73,7 +80,7 @@ echo '</table>';
 
 echo '</main>';
 
-echo '<div class="actions">';
+echo '<div class="actions admin">';
 
 echo '<form action="" method="post">';
 if ($targetUser["enabled"]) {
@@ -93,6 +100,11 @@ echo '</form>';
 echo '<form action="" method="post">';
 echo '<input type="hidden" name="action" value="removeTicket"/>';
 echo '<input type="submit" value="Remove ticket"/>';
+echo '</form>';
+
+echo '<form action="" method="post">';
+echo '<input type="hidden" name="action" value="delete"/>';
+echo '<input type="submit" value="Delete"/>';
 echo '</form>';
 
 echo '</div>';

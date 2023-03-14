@@ -1,5 +1,6 @@
 <?php
-function removeTicket($id) {
+function consumeTickets($session) {
+    $playerIds = $session["players"];
     $filePath = __DIR__ . "/../../users.json";
 
     $size = filesize($filePath);
@@ -9,7 +10,7 @@ function removeTicket($id) {
         $users = json_decode($content, true);
 
         foreach ($users as $userId => &$user) {
-            if ($userId === $id) {
+            if (in_array($userId, $playerIds)) {
                 $tickets = isset($user["tickets"])?$user["tickets"]:0;
                 $user["tickets"] = $tickets - 1;
             }

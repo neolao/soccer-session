@@ -1,5 +1,9 @@
 <?php
-function removeTicket($id) {
+function addUser($id, $name) {
+    if (empty($id) || empty($name)) {
+        return;
+    }
+
     $filePath = __DIR__ . "/../../users.json";
 
     $size = filesize($filePath);
@@ -8,11 +12,11 @@ function removeTicket($id) {
         $content = fread($fp, $size);
         $users = json_decode($content, true);
 
-        foreach ($users as $userId => &$user) {
-            if ($userId === $id) {
-                $tickets = isset($user["tickets"])?$user["tickets"]:0;
-                $user["tickets"] = $tickets - 1;
-            }
+        // Add the user only if it doesn't already exist
+        if (!isset($users[$id])) {
+            $users[$id] = array(
+                "name" => $name
+            );
         }
 
         ftruncate($fp, 0);
@@ -22,4 +26,5 @@ function removeTicket($id) {
         flock($fp, LOCK_UN);
     }
     fclose($fp);
+
 }

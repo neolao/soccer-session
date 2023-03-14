@@ -21,6 +21,9 @@ function getSession($filePath) {
     if (!isset($session["waiting"])) {
         $session["waiting"] = array();
     }
+    if (!isset($session["consumedPlayerTickets"])) {
+        $session["consumedPlayerTickets"] = array();
+    }
 
     $baseName = basename($filePath, ".json");
     $session["baseName"] = $baseName;

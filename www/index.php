@@ -38,12 +38,12 @@ echo '</table>';
 echo '</main>';
 
 if (isAdmin($user)) {
-    echo '<div class="admin">';
+    echo '<div class="actions admin">';
 
     // Form to add a session
     echo '<form action="" method="post">';
     echo '<input type="hidden" name="action" value="add"/>';
-    echo '<input type="date" name="date" required/>';
+    echo '<label>Date: <input type="date" name="date" required/></label>';
     echo '<input type="submit" value="Add"/>';
     echo '</form>';
 

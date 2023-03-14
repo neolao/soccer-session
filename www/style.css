@@ -1,8 +1,9 @@
-@import url('https://fonts.googleapis.com/css2?family=Rajdhani:wght@500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Oxygen:wght@400;700&family=Rajdhani:wght@300&display=swap');
 
 html, body {
     margin: 0;
     padding: 0;
+    font-family: Oxygen, sans-serif;
 }
 
 menu {
@@ -51,21 +52,44 @@ table.users {
 }
 td {
     height: 1em;
+    padding: .1em 1em;
     border-bottom: dashed 1px #ccc;
 }
 td form {
     display: inline-block;
-    margin: 0 1em 0 1em;
+    margin: 0;
+}
+
+.ticket-count {
+    display: inline-block;
+    width: 3em;
+    text-align: center;
 }
 
 .actions {
+    display: flex;
     margin: 1em;
     padding: 1em;
     border: solid 1px #000;
 }
-.admin {
-    margin: 1em;
-    padding: 1em;
-    border: solid 1px #000;
+.actions.admin {
     background: #933;
+    color: #fff;
+}
+.actions.consume-tickets {
+    display: block;
+}
+.actions form {
+    display: block;
+}
+.actions form+form {
+    margin-left: 1em;
+}
+.actions label {
+    display: inline-block;
+    margin-right: 1em;
+    margin-bottom: .5em;
+}
+input.uuid {
+    width: 18em;
 }
