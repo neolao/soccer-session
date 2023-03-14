@@ -10,6 +10,7 @@ include_once(__DIR__ . "/functions/markPlayerTicketAsConsumed.php");
 include_once(__DIR__ . "/functions/markPlayerAsCaptain.php");
 include_once(__DIR__ . "/functions/unmarkPlayerAsCaptain.php");
 include_once(__DIR__ . "/functions/isCaptain.php");
+include_once(__DIR__ . "/functions/hasEnoughCaptain.php");
 include_once(__DIR__ . "/functions/getPlayerName.php");
 include_once(__DIR__ . "/functions/getPlayerTickets.php");
 include_once(__DIR__ . "/functions/bookPlayer.php");

@@ -156,7 +156,7 @@ for ($index = 0; $index < MAX_PLAYERS; $index++) {
                 echo '<input type="hidden" name="id" value="'.$playerId.'"/>';
                 echo '<input type="submit" value="🎖" class="unmark-captain"/>';
                 echo '</form>';
-            } else {
+            } elseif (!hasEnoughCaptain($session)) {
                 echo '<form action="" method="post">';
                 echo '<input type="hidden" name="action" value="markAsCaptain"/>';
                 echo '<input type="hidden" name="id" value="'.$playerId.'"/>';

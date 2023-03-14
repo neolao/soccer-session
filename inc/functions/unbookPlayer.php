@@ -2,6 +2,7 @@
 function unbookPlayer(&$session, $userId) {
     $players = &$session["players"];
     $waitingPlayers = &$session["waiting"];
+    $captains = &$session["captains"];
 
     // Remove from players
     if (in_array($userId, $players)) {
@@ -10,6 +11,7 @@ function unbookPlayer(&$session, $userId) {
         });
         $players = array_values($players);
     }
+
     // Remove from waiting list
     if (in_array($userId, $waitingPlayers)) {
         $waitingPlayers = array_filter($waitingPlayers, function ($element) use ($userId) {
@@ -17,6 +19,7 @@ function unbookPlayer(&$session, $userId) {
         });
         $waitingPlayers = array_values($waitingPlayers);
     }
+
     // Put user from waiting list to player list
     if (count($players) < MAX_PLAYERS) {
         if (count($waitingPlayers) > 0) {
@@ -25,6 +28,15 @@ function unbookPlayer(&$session, $userId) {
         }
     }
 
+    // Remove from captains
+    if (in_array($userId, $captains)) {
+        $captains = array_filter($captains, function ($element) use ($userId) {
+            return $element !== $userId;
+        });
+        $captains = array_values($captains);
+    }
+
     $players = array_unique($players);
     $waitingPlayers = array_unique($waitingPlayers);
+    $captains = array_unique($captains);
 }
