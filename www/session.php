@@ -296,19 +296,15 @@ if (isAdmin($user)) {
     echo '<thead><tr><th>Players</th><th>Tickets</th></tr></thead>';
     echo '<tbody>';
     for ($index = 0; $index < MAX_PLAYERS; $index++) {
-        echo '<tr>';
-        if (isset($players[$index])) {
+        if (isset($players[$index]) && !isGuest($players[$index])) {
             $playerId = $players[$index];
+            echo '<tr>';
             echo '<td>' . getPlayerName($playerId, $users) . '</td>';
             echo '<td>';
             echo '<span class="ticket-count">'.getPlayerTickets($playerId, $users) .'</span> → <span class="ticket-count">'.(getPlayerTickets($playerId, $users) - 1).'</span>';
             echo '</td>';
-        } else {
-            echo '<td></td>';
-            echo '<td></td>';
+            echo '</tr>';
         }
-
-        echo '</tr>';
     }
     echo '</tbody>';
     echo '</table>';
