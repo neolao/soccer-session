@@ -15,6 +15,7 @@ include_once(__DIR__ . "/functions/getPlayerName.php");
 include_once(__DIR__ . "/functions/getPlayerTickets.php");
 include_once(__DIR__ . "/functions/bookPlayer.php");
 include_once(__DIR__ . "/functions/bookGuest.php");
+include_once(__DIR__ . "/functions/isGuest.php");
 include_once(__DIR__ . "/functions/unbookPlayer.php");
 include_once(__DIR__ . "/functions/getUsers.php");
 include_once(__DIR__ . "/functions/enableUser.php");

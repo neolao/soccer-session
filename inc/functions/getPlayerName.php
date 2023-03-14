@@ -4,8 +4,9 @@ function getPlayerName($id, $users) {
         return $users[$id]["name"];
     }
 
-    if (substr($id, 0, 8) === '[guest] ') {
-        return $id;
+    if (isGuest($id)) {
+        $name = substr($id, 8);
+        return $name.' 🙇';
     }
 
     return $id;
