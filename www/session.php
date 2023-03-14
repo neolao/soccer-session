@@ -175,7 +175,7 @@ if (isAdmin($user)) {
     echo '<label><select name="id">';
     foreach ($users as $i => $u) {
         if (!in_array($i, $players) && !in_array($i, $waitingPlayers)) {
-            echo '<option value="'.$i.'">'.$u["name"].'</option>';
+            echo '<option value="'.$i.'">'.getPlayerName($i, $users).'</option>';
         }
     }
     echo '</select></label>';
@@ -188,10 +188,11 @@ if (isAdmin($user)) {
     echo '<form action="" method="post">';
     echo '<input type="hidden" name="action" value="unbookPlayer"/>';
     echo '<label><select name="id">';
-    foreach ($users as $i => $u) {
-        if (in_array($i, $players) || in_array($i, $waitingPlayers)) {
-            echo '<option value="'.$i.'">'.$u["name"].'</option>';
-        }
+    foreach ($players as $i) {
+        echo '<option value="'.$i.'">'.getPlayerName($i, $users).'</option>';
+    }
+    foreach ($waitingPlayers as $i) {
+        echo '<option value="'.$i.'">'.getPlayerName($i, $users).'</option>';
     }
     echo '</select></label>';
     echo '<input type="submit" value="Unbook"/>';
@@ -246,9 +247,9 @@ if (isAdmin($user)) {
         echo '<tr>';
         if (isset($players[$index])) {
             $playerId = $players[$index];
-            echo '<td>' . $users[$playerId]["name"] . '</td>';
+            echo '<td>' . getPlayerName($playerId, $users) . '</td>';
             echo '<td>';
-            echo '<span class="ticket-count">'.$users[$playerId]["tickets"] .'</span> → <span class="ticket-count">'.($users[$playerId]["tickets"] - 1).'</span>';
+            echo '<span class="ticket-count">'.getPlayerTickets($playerId, $users) .'</span> → <span class="ticket-count">'.(getPlayerTickets($playerId, $users) - 1).'</span>';
             echo '</td>';
         } else {
             echo '<td></td>';
