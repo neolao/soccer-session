@@ -93,3 +93,6 @@ td form {
 input.uuid {
     width: 18em;
 }
+.unmark-captain {
+    text-decoration: line-through;
+}

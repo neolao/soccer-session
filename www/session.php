@@ -85,6 +85,16 @@ if (isAdmin($user) && isset($_POST["action"]) && $_POST["action"] === "unbookPla
     saveSession($sessionFilePath, json_encode($session, JSON_PRETTY_PRINT));
 }
 
+// Handle form to mark/unmark a player as captain
+if (isAdmin($user) && isset($_POST["action"]) && $_POST["action"] === "markAsCaptain") {
+    markPlayerAsCaptain($session, $_POST["id"]);
+    saveSession($sessionFilePath, json_encode($session, JSON_PRETTY_PRINT));
+}
+if (isAdmin($user) && isset($_POST["action"]) && $_POST["action"] === "unmarkAsCaptain") {
+    unmarkPlayerAsCaptain($session, $_POST["id"]);
+    saveSession($sessionFilePath, json_encode($session, JSON_PRETTY_PRINT));
+}
+
 // Header
 include "../inc/header.html";
 generateMenu($user, PAGE_SESSION);
@@ -101,13 +111,21 @@ echo '</h1>';
 
 // Players
 echo '<table>';
-echo '<thead><tr><th>Players</th><th>Ticket</th></tr></thead>';
+echo '<thead><tr><th>Players</th><th>Ticket</th>';
+if (isAdmin($user)) {
+    echo '<th>Actions</th>';
+}
+echo '</tr></thead>';
 echo '<tbody>';
 for ($index = 0; $index < MAX_PLAYERS; $index++) {
     echo '<tr>';
     if (isset($players[$index])) {
         $playerId = $players[$index];
-        echo '<td>' . getPlayerName($playerId, $users) . '</td>';
+        echo '<td>' . getPlayerName($playerId, $users);
+        if (isCaptain($session, $playerId)) {
+            echo "🎖";
+        }
+        echo '</td>';
         if (getPlayerTickets($playerId, $users) > 0 || in_array($playerId, $session["consumedPlayerTickets"])) {
             echo '<td>Paid</td>';
         } else {
@@ -116,6 +134,36 @@ for ($index = 0; $index < MAX_PLAYERS; $index++) {
     } else {
         echo '<td></td>';
         echo '<td></td>';
+    }
+
+    if (isAdmin($user)) {
+        echo '<td>';
+
+        if (isset($players[$index])) {
+            // Unbook
+            echo '<form action="" method="post">';
+            echo '<input type="hidden" name="action" value="unbookPlayer"/>';
+            echo '<input type="hidden" name="id" value="'.$playerId.'"/>';
+            echo '<input type="submit" value="Unbook"/>';
+            echo '</form>';
+
+            // Captain
+            if (isCaptain($session, $playerId)) {
+                echo '<form action="" method="post">';
+                echo '<input type="hidden" name="action" value="unmarkAsCaptain"/>';
+                echo '<input type="hidden" name="id" value="'.$playerId.'"/>';
+                echo '<input type="submit" value="🎖" class="unmark-captain"/>';
+                echo '</form>';
+            } else {
+                echo '<form action="" method="post">';
+                echo '<input type="hidden" name="action" value="markAsCaptain"/>';
+                echo '<input type="hidden" name="id" value="'.$playerId.'"/>';
+                echo '<input type="submit" value="🎖"/>';
+                echo '</form>';
+            }
+        }
+
+        echo '</td>';
     }
 
     echo '</tr>';
@@ -184,6 +232,7 @@ if (isAdmin($user)) {
     echo '</div>';
 
     // Unbook a player
+    /*
     echo '<div class="actions admin">';
     echo '<form action="" method="post">';
     echo '<input type="hidden" name="action" value="unbookPlayer"/>';
@@ -198,6 +247,7 @@ if (isAdmin($user)) {
     echo '<input type="submit" value="Unbook"/>';
     echo '</form>';
     echo '</div>';
+    */
 
     // Add a guest
     echo '<div class="actions admin">';
