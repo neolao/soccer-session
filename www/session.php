@@ -109,7 +109,7 @@ for ($index = 0; $index < MAX_PLAYERS; $index++) {
         $playerId = $players[$index];
         echo '<td>' . getPlayerName($playerId, $users) . '</td>';
         if (getPlayerTickets($playerId, $users) > 0 || in_array($playerId, $session["consumedPlayerTickets"])) {
-            echo '<td>OK</td>';
+            echo '<td>Paid</td>';
         } else {
             echo '<td></td>';
         }
@@ -133,7 +133,7 @@ for ($index = 0; $index < MAX_WAITING_PLAYERS; $index++) {
         $playerId = $waitingPlayers[$index];
         echo '<td>' . getPlayerName($playerId, $users) . '</td>';
         if (getPlayerTickets($playerId, $users) > 0) {
-            echo '<td>OK</td>';
+            echo '<td>Paid</td>';
         } else {
             echo '<td></td>';
         }
