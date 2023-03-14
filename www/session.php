@@ -141,11 +141,13 @@ for ($index = 0; $index < MAX_PLAYERS; $index++) {
 
         if (isset($players[$index])) {
             // Unbook
+            /*
             echo '<form action="" method="post">';
             echo '<input type="hidden" name="action" value="unbookPlayer"/>';
             echo '<input type="hidden" name="id" value="'.$playerId.'"/>';
             echo '<input type="submit" value="Unbook"/>';
             echo '</form>';
+            //*/
 
             // Captain
             if (isCaptain($session, $playerId)) {
@@ -232,7 +234,7 @@ if (isAdmin($user)) {
     echo '</div>';
 
     // Unbook a player
-    /*
+    ///*
     echo '<div class="actions admin">';
     echo '<form action="" method="post">';
     echo '<input type="hidden" name="action" value="unbookPlayer"/>';
@@ -247,7 +249,7 @@ if (isAdmin($user)) {
     echo '<input type="submit" value="Unbook"/>';
     echo '</form>';
     echo '</div>';
-    */
+    //*/
 
     // Add a guest
     echo '<div class="actions admin">';
