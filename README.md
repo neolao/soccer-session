@@ -34,7 +34,7 @@ A user has an identifier and a name. And the identifier is unique.
 
 The file `users.json` represents a key-value dictionary. The key is the user identifier and the value is the user properties.
 
-To create an administrator, you need to set a user property `type` to `admin`.
+To create an administrator, you must set the `type` property of the user to `admin`.
 
 Example:
 ```json
