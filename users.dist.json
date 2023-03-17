@@ -1,12 +1,4 @@
 {
-    "828284cf-e41a-434e-945b-a6716e63c371": {
-        "name": "Eric",
-        "type": "admin"
-    },
-    "59a64778-7486-4669-83c6-8da397eba3f6": {
-        "name": "Olivier",
-        "type": "admin"
-    },
     "a": {
         "name": "Player A"
     },
@@ -57,5 +49,32 @@
     },
     "q": {
         "name": "Player Q"
+    },
+    "r": {
+        "name": "Player R"
+    },
+    "s": {
+        "name": "Player S"
+    },
+    "t": {
+        "name": "Player T"
+    },
+    "u": {
+        "name": "Player U"
+    },
+    "v": {
+        "name": "Player V"
+    },
+    "w": {
+        "name": "Player W"
+    },
+    "x": {
+        "name": "Player X"
+    },
+    "y": {
+        "name": "Player Y"
+    },
+    "z": {
+        "name": "Player Z"
     }
 }
