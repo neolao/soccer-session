@@ -2,7 +2,7 @@
 
 ## Installation
 
-1. Create `users.json` and make it writable by PHP
+1. Create `users.json` based on `users.dist.json` and make it writable by PHP
 2. Make the folder `session` writable by PHP
 3. The web server should target the folder `www`
 
@@ -24,6 +24,27 @@ server {
     fastcgi_index index.php;
     include /etc/nginx/fastcgi_params;
     fastcgi_param SCRIPT_FILENAME $document_root/$fastcgi_script_name;
+  }
+}
+```
+
+## How to create a user
+
+A user has an identifier and a name. And the identifier is unique.
+
+The file `users.json` represents a key-value dictionary. The key is the user identifier and the value is the user properties.
+
+To create an administrator, you need to set a user property `type` to `admin`.
+
+Example:
+```json
+{
+  "1234": {
+    "name": "John Doe",
+    "type": "admin"
+  },
+  "5678": {
+    "name": "Sarah Croche"
   }
 }
 ```

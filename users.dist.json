@@ -1,6 +1,7 @@
 {
     "a": {
-        "name": "Player A"
+        "name": "Player A",
+        "type": "admin"
     },
     "b": {
         "name": "Player B"
