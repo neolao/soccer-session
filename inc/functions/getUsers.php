@@ -29,6 +29,9 @@ function getUsers() {
         if (!isset($user["tickets"])) {
             $user["tickets"] = 0;
         }
+        if (!isset($user["captainCount"])) {
+            $user["captainCount"] = 0;
+        }
     }
 
     return $users;

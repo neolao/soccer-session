@@ -47,18 +47,20 @@ if (isAdmin($user) && isset($_POST["action"]) && $_POST["action"] === "open") {
 // Handle form to consume tickets
 if (isAdmin($user) && isset($_POST["action"]) && $_POST["action"] === "consumeTickets") {
     markPlayerTicketAsConsumed($session, $users);
-    consumeTickets($session);
+    consumeTickets($session, $users);
+    countCaptains($session, $users);
     saveSession($sessionFilePath, json_encode($session, JSON_PRETTY_PRINT));
-    $users = getUsers();
+    saveUsers($users);
 }
 
 // Handle form to close session and consume tickets
 if (isAdmin($user) && isset($_POST["action"]) && $_POST["action"] === "closeAndConsumeTickets") {
     closeSession($session);
     markPlayerTicketAsConsumed($session, $users);
-    consumeTickets($session);
+    consumeTickets($session, $users);
+    countCaptains($session, $users);
     saveSession($sessionFilePath, json_encode($session, JSON_PRETTY_PRINT));
-    $users = getUsers();
+    saveUsers($users);
 }
 
 // Handle form to book
@@ -95,6 +97,13 @@ if (isAdmin($user) && isset($_POST["action"]) && $_POST["action"] === "unmarkAsC
     saveSession($sessionFilePath, json_encode($session, JSON_PRETTY_PRINT));
 }
 
+// Handle form to choose random captains
+if (isAdmin($user) && isset($_POST["action"]) && $_POST["action"] === "randomCaptains") {
+    $includeGuests = (isset($_POST["includeGuests"]) && $_POST["includeGuests"] === "on");
+    chooseRandomCaptains($session, $users, $includeGuests);
+    saveSession($sessionFilePath, json_encode($session, JSON_PRETTY_PRINT));
+}
+
 // Header
 include "../inc/header.html";
 generateMenu($user, PAGE_SESSION);
@@ -111,7 +120,7 @@ echo '</h1>';
 
 // Players
 echo '<table>';
-echo '<thead><tr><th>Players</th><th>Ticket</th>';
+echo '<thead><tr><th>Players</th><th>Captain count</th><th>Ticket</th>';
 if (isAdmin($user)) {
     echo '<th>Actions</th>';
 }
@@ -126,12 +135,14 @@ for ($index = 0; $index < MAX_PLAYERS; $index++) {
             echo "🎖";
         }
         echo '</td>';
+        echo '<td>' . getPlayerCaptainCount($playerId, $users) . '</td>';
         if (getPlayerTickets($playerId, $users) > 0 || in_array($playerId, $session["consumedPlayerTickets"])) {
             echo '<td>Paid</td>';
         } else {
             echo '<td></td>';
         }
     } else {
+        echo '<td></td>';
         echo '<td></td>';
         echo '<td></td>';
     }
@@ -218,6 +229,15 @@ if ($session["status"] === SESSION_STATUS_OPEN && (count($players) < MAX_PLAYERS
 }
 
 if (isAdmin($user)) {
+    // Random captains
+    echo '<div class="actions admin">';
+    echo '<form action="" method="post">';
+    echo '<input type="hidden" name="action" value="randomCaptains"/>';
+    echo '<input type="submit" value="Choose random captains"/>';
+    echo '<label><input type="checkbox" name="includeGuests"> Include guests</label>';
+    echo '</form>';
+    echo '</div>';
+
     // Book a player
     echo '<div class="actions admin">';
     echo '<form action="" method="post">';

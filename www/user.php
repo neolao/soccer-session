@@ -71,10 +71,15 @@ echo '<tr><td>ID</td><td>'.$targetUserId.'</td></tr>';
 echo '<tr><td>Type</td><td>'.$targetUser["type"].'</td></tr>';
 echo '<tr><td>Name</td><td>'.$targetUser["name"].'</td></tr>';
 echo '<tr><td>Tickets</td><td>'.$targetUser["tickets"].'</td></tr>';
+echo '<tr><td>Captain count</td><td>'.$targetUser["captainCount"].'</td></tr>';
 
 $status = $targetUser["enabled"]?"Enabled":"Disabled";
 echo '<tr><td>Status</td><td>'.$status.'</td></tr>';
-$link = $_SERVER['REQUEST_SCHEME'].'://'.$_SERVER['SERVER_NAME'].'?user='.$targetUserId;
+$scheme = $_SERVER['REQUEST_SCHEME'];
+if (empty($scheme)) {
+    $scheme = 'https';
+}
+$link = $scheme.'://'.$_SERVER['SERVER_NAME'].'?user='.$targetUserId;
 echo '<tr><td>Link</td><td><a href="'.$link.'">'.$link.'</a></td></tr>';
 
 echo '</tbody>';
