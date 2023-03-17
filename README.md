@@ -3,7 +3,7 @@
 ## Installation
 
 1. Create `users.json` based on `users.dist.json` and make it writable by PHP
-2. Make the folder `session` writable by PHP
+2. Make the folder `sessions` writable by PHP
 3. The web server should target the folder `www`
 
 ### Example for nginx with php-fpm
