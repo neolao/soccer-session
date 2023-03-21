@@ -51,6 +51,14 @@ if (isset($_POST["action"]) && $_POST["action"] === "delete") {
     die();
 }
 
+// Handle form to rename the user
+if (isset($_POST["action"]) && $_POST["action"] === "rename") {
+    $newName = $_POST["name"];
+    renameUser($targetUserId, $newName);
+    header('Location: /users.php');
+    die();
+}
+
 // Get the target user
 $targetUser = $users[$_GET["id"]];
 
@@ -63,6 +71,7 @@ echo '<main>';
 
 echo '<h1>'.$targetUser["name"].'</h1>';
 
+echo '<div class="table-wrapper">';
 echo '<table>';
 echo '<thead><tr><th>Property</th><th>Value</th></tr></thead>';
 echo '<tbody>';
@@ -84,6 +93,7 @@ echo '<tr><td>Link</td><td><a href="'.$link.'">'.$link.'</a></td></tr>';
 
 echo '</tbody>';
 echo '</table>';
+echo '</div>';
 
 echo '</main>';
 
@@ -116,4 +126,12 @@ echo '</form>';
 
 echo '</div>';
 
+// Form to rename the user
+echo '<div class="actions admin">';
+echo '<form action="" method="post">';
+echo '<input type="hidden" name="action" value="rename"/>';
+echo '<labe><input type="text" name="name" value="'.$targetUser["name"].'"/></label>';
+echo '<input type="submit" value="Rename"/>';
+echo '</form>';
+echo '</div>';
 include "../inc/footer.html";

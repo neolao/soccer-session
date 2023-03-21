@@ -119,9 +119,11 @@ if ($session["status"] === SESSION_STATUS_OPEN) {
 echo '</h1>';
 
 // Players
+echo '<div class="table-wrapper">';
 echo '<table>';
-echo '<thead><tr><th>Players</th><th>Captain count</th><th>Ticket</th>';
+echo '<thead><tr><th>Players</th><th>Ticket</th>';
 if (isAdmin($user)) {
+    echo '<th class="center">🎖</th>';
     echo '<th>Actions</th>';
 }
 echo '</tr></thead>';
@@ -135,7 +137,6 @@ for ($index = 0; $index < MAX_PLAYERS; $index++) {
             echo "🎖";
         }
         echo '</td>';
-        echo '<td>' . getPlayerCaptainCount($playerId, $users) . '</td>';
         if (getPlayerTickets($playerId, $users) > 0 || in_array($playerId, $session["consumedPlayerTickets"])) {
             echo '<td>Paid</td>';
         } else {
@@ -144,10 +145,10 @@ for ($index = 0; $index < MAX_PLAYERS; $index++) {
     } else {
         echo '<td></td>';
         echo '<td></td>';
-        echo '<td></td>';
     }
 
     if (isAdmin($user)) {
+        echo '<td><span class="captain-count">' . getPlayerCaptainCount($playerId, $users) . '</span></td>';
         echo '<td>';
 
         if (isset($players[$index])) {
@@ -183,8 +184,10 @@ for ($index = 0; $index < MAX_PLAYERS; $index++) {
 }
 echo '</tbody>';
 echo '</table>';
+echo '</div>';
 
 // Waiting players
+echo '<div class="table-wrapper">';
 echo '<table>';
 echo '<thead><tr><th>Waiting players</th><th>Tickets</th></tr></thead>';
 echo '<tbody>';
@@ -207,6 +210,7 @@ for ($index = 0; $index < MAX_WAITING_PLAYERS; $index++) {
 }
 echo '</tbody>';
 echo '</table>';
+echo '</div>';
 
 echo '</main>';
 
@@ -313,7 +317,7 @@ if (isAdmin($user)) {
     // Consume tickets
     echo '<div class="actions admin consume-tickets">';
     echo '<table>';
-    echo '<thead><tr><th>Players</th><th>Tickets</th></tr></thead>';
+    echo '<thead><tr><th>Players</th><th>Tickets</th><th>Captain</th></tr></thead>';
     echo '<tbody>';
     for ($index = 0; $index < MAX_PLAYERS; $index++) {
         if (isset($players[$index]) && !isGuest($players[$index])) {
@@ -321,7 +325,12 @@ if (isAdmin($user)) {
             echo '<tr>';
             echo '<td>' . getPlayerName($playerId, $users) . '</td>';
             echo '<td>';
-            echo '<span class="ticket-count">'.getPlayerTickets($playerId, $users) .'</span> → <span class="ticket-count">'.(getPlayerTickets($playerId, $users) - 1).'</span>';
+            echo '<span class="ticket-count">'.getPlayerTickets($playerId, $users) .'</span>→<span class="ticket-count">'.(getPlayerTickets($playerId, $users) - 1).'</span>';
+            echo '</td>';
+            echo '<td>';
+            if (isCaptain($session, $playerId)) {
+                echo '<span class="captain-count">'.getPlayerCaptainCount($playerId, $users) .'</span>→<span class="ticket-count">'.(getPlayerCaptainCount($playerId, $users) + 1).'</span>';
+            }
             echo '</td>';
             echo '</tr>';
         }

@@ -33,6 +33,10 @@ main {
     padding: 1em;
 }
 
+.table-wrapper {
+    overflow: auto;
+}
+
 table {
     margin-bottom: 1em;
     width: auto;
@@ -41,6 +45,9 @@ th {
     padding: .1em 1em;
     text-align: left;
     border-bottom: solid 1px #000;
+}
+th.center {
+    text-align: center;
 }
 @media screen and (max-width: 14em) {
     table {
@@ -54,13 +61,14 @@ td {
     height: 1em;
     padding: .1em 1em;
     border-bottom: dashed 1px #ccc;
+    white-space: nowrap;
 }
 td form {
     display: inline-block;
     margin: 0;
 }
 
-.ticket-count {
+.ticket-count, .captain-count {
     display: inline-block;
     width: 3em;
     text-align: center;
@@ -71,6 +79,7 @@ td form {
     margin: 1em;
     padding: 1em;
     border: solid 1px #000;
+    overflow: auto;
 }
 .actions.admin {
     background: #933;

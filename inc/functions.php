@@ -25,6 +25,7 @@ include_once(__DIR__ . "/functions/enableUser.php");
 include_once(__DIR__ . "/functions/disableUser.php");
 include_once(__DIR__ . "/functions/addUser.php");
 include_once(__DIR__ . "/functions/deleteUser.php");
+include_once(__DIR__ . "/functions/renameUser.php");
 include_once(__DIR__ . "/functions/countCaptains.php");
 include_once(__DIR__ . "/functions/addTicket.php");
 include_once(__DIR__ . "/functions/removeTicket.php");
