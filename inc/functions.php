@@ -1,5 +1,6 @@
 <?php
 include_once(__DIR__ . "/functions/addSession.php");
+include_once(__DIR__ . "/functions/getConfig.php");
 include_once(__DIR__ . "/functions/deleteSession.php");
 include_once(__DIR__ . "/functions/getSessions.php");
 include_once(__DIR__ . "/functions/getSession.php");

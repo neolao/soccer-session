@@ -2,6 +2,9 @@
 include "../inc/constants.php";
 include "../inc/functions.php";
 
+// Load config
+$config = getConfig();
+
 // Load authorized users
 $users = getUsers();
 
@@ -228,6 +231,10 @@ if ($session["status"] === SESSION_STATUS_OPEN && (count($players) < MAX_PLAYERS
         echo '<input type="hidden" name="action" value="book"/>';
         echo '<input type="submit" value="Book"/>';
         echo '</form>';
+    }
+
+    if (isset($config["linkToBuyTicket"]) && !empty($config["linkToBuyTicket"])) {
+        echo '<span class="buy-ticket"><a href="'.$config["linkToBuyTicket"].'">Buy a ticket</a></span>';
     }
     echo '</div>';
 }
