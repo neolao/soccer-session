@@ -1,10 +1,11 @@
 <?php
-function getPlayerTickets($id, $users) {
+function getPlayerTickets($id, $users, $session) {
     if (isset($users[$id])) {
         return $users[$id]["tickets"];
     }
 
-    if (substr($id, 0, 8) === '[guest] ') {
+    $consumedGuestTickets = $session["consumedGuestTickets"];
+    if (isGuest($id) && in_array($id, $consumedGuestTickets)) {
         return 1;
     }
 

@@ -10,6 +10,8 @@ include_once(__DIR__ . "/functions/openSession.php");
 include_once(__DIR__ . "/functions/markPlayerTicketAsConsumed.php");
 include_once(__DIR__ . "/functions/markPlayerAsCaptain.php");
 include_once(__DIR__ . "/functions/unmarkPlayerAsCaptain.php");
+include_once(__DIR__ . "/functions/markGuestTicketAsPaid.php");
+include_once(__DIR__ . "/functions/unmarkGuestTicketAsPaid.php");
 include_once(__DIR__ . "/functions/chooseRandomCaptains.php");
 include_once(__DIR__ . "/functions/isCaptain.php");
 include_once(__DIR__ . "/functions/hasEnoughCaptain.php");

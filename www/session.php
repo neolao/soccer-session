@@ -56,6 +56,18 @@ if (isAdmin($user) && isset($_POST["action"]) && $_POST["action"] === "consumeTi
     saveUsers($users);
 }
 
+// Handle form to mark guest ticket as paid
+if (isAdmin($user) && isset($_POST["action"]) && $_POST["action"] === "markGuestTicketAsPaid") {
+    markGuestTicketAsPaid($session, $_POST["id"]);
+    saveSession($sessionFilePath, json_encode($session, JSON_PRETTY_PRINT));
+}
+
+// Handle form to unmark guest ticket as paid
+if (isAdmin($user) && isset($_POST["action"]) && $_POST["action"] === "unmarkGuestTicketAsPaid") {
+    unmarkGuestTicketAsPaid($session, $_POST["id"]);
+    saveSession($sessionFilePath, json_encode($session, JSON_PRETTY_PRINT));
+}
+
 // Handle form to close session and consume tickets
 if (isAdmin($user) && isset($_POST["action"]) && $_POST["action"] === "closeAndConsumeTickets") {
     closeSession($session);
@@ -140,7 +152,7 @@ for ($index = 0; $index < MAX_PLAYERS; $index++) {
             echo "🎖";
         }
         echo '</td>';
-        if (getPlayerTickets($playerId, $users) > 0 || in_array($playerId, $session["consumedPlayerTickets"])) {
+        if (getPlayerTickets($playerId, $users, $session) > 0 || in_array($playerId, $session["consumedPlayerTickets"])) {
             echo '<td>Paid</td>';
         } else {
             echo '<td></td>';
@@ -151,7 +163,11 @@ for ($index = 0; $index < MAX_PLAYERS; $index++) {
     }
 
     if (isAdmin($user)) {
-        echo '<td><span class="captain-count">' . getPlayerCaptainCount($playerId, $users) . '</span></td>';
+        echo '<td>';
+        if (isset($players[$index])) {
+            echo '<span class="captain-count">' . getPlayerCaptainCount($playerId, $users) . '</span>';
+        }
+        echo '</td>';
         echo '<td>';
 
         if (isset($players[$index])) {
@@ -178,6 +194,23 @@ for ($index = 0; $index < MAX_PLAYERS; $index++) {
                 echo '<input type="submit" value="🎖"/>';
                 echo '</form>';
             }
+
+            // Mark guest ticket as paid
+            if (isGuest($playerId)) {
+                if (getPlayerTickets($playerId, $users, $session) === 0) {
+                    echo '<form action="" method="post">';
+                    echo '<input type="hidden" name="action" value="markGuestTicketAsPaid"/>';
+                    echo '<input type="hidden" name="id" value="'.$playerId.'"/>';
+                    echo '<input type="submit" value="💰"/>';
+                    echo '</form>';
+                } else {
+                    echo '<form action="" method="post">';
+                    echo '<input type="hidden" name="action" value="unmarkGuestTicketAsPaid"/>';
+                    echo '<input type="hidden" name="id" value="'.$playerId.'"/>';
+                    echo '<input type="submit" value="💰" class="unmark-guest-ticket"/>';
+                    echo '</form>';
+                }
+            }
         }
 
         echo '</td>';
@@ -199,7 +232,7 @@ for ($index = 0; $index < MAX_WAITING_PLAYERS; $index++) {
     if (isset($waitingPlayers[$index])) {
         $playerId = $waitingPlayers[$index];
         echo '<td>' . getPlayerName($playerId, $users) . '</td>';
-        if (getPlayerTickets($playerId, $users) > 0) {
+        if (getPlayerTickets($playerId, $users, $session) > 0) {
             echo '<td>Paid</td>';
         } else {
             echo '<td></td>';
@@ -332,7 +365,7 @@ if (isAdmin($user)) {
             echo '<tr>';
             echo '<td>' . getPlayerName($playerId, $users) . '</td>';
             echo '<td>';
-            echo '<span class="ticket-count">'.getPlayerTickets($playerId, $users) .'</span>→<span class="ticket-count">'.(getPlayerTickets($playerId, $users) - 1).'</span>';
+            echo '<span class="ticket-count">'.getPlayerTickets($playerId, $users, $session) .'</span>→<span class="ticket-count">'.(getPlayerTickets($playerId, $users, $session) - 1).'</span>';
             echo '</td>';
             echo '<td>';
             if (isCaptain($session, $playerId)) {

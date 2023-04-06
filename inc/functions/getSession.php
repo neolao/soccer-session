@@ -27,6 +27,9 @@ function getSession($filePath) {
     if (!isset($session["guests"])) {
         $session["guests"] = array();
     }
+    if (!isset($session["consumedGuestTickets"])) {
+        $session["consumedGuestTickets"] = array();
+    }
     if (!isset($session["captains"])) {
         $session["captains"] = array();
     }

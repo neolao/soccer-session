@@ -102,7 +102,7 @@ td form {
 input.uuid {
     width: 18em;
 }
-.unmark-captain {
+.unmark-captain, .unmark-guest-ticket {
     text-decoration: line-through;
 }
 .buy-ticket {
