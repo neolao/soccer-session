@@ -9,20 +9,14 @@ $users = getUsers();
 $user = authenticate($users);
 $userId = $user["id"];
 
-// Handle form to add a session
-if (isAdmin($user) && isset($_POST["action"]) && $_POST["action"] === "add") {
-    $baseName = $_POST["date"];
-    addSession($baseName);
-}
-
 // Header
 include "../inc/header.html";
-generateMenu($user, PAGE_SESSIONS);
+generateMenu($user, PAGE_CLOSED_SESSIONS);
 
 echo '<main>';
 
 // Sessions
-$sessions = getOpenSessions();
+$sessions = getClosedSessions();
 echo '<table>';
 echo '<thead><tr><th>Date</th><th>Status</th></tr></thead>';
 echo '<tbody>';
@@ -36,18 +30,5 @@ echo '</tbody>';
 echo '</table>';
 
 echo '</main>';
-
-if (isAdmin($user)) {
-    echo '<div class="actions admin">';
-
-    // Form to add a session
-    echo '<form action="" method="post">';
-    echo '<input type="hidden" name="action" value="add"/>';
-    echo '<label>Date: <input type="date" name="date" required/></label>';
-    echo '<input type="submit" value="Add"/>';
-    echo '</form>';
-
-    echo '</div>';
-}
 
 include "../inc/footer.html";

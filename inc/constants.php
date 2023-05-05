@@ -1,6 +1,7 @@
 <?php
 
 const PAGE_SESSIONS = "sessions";
+const PAGE_CLOSED_SESSIONS = "closed sessions";
 const PAGE_SESSION = "session";
 const PAGE_USERS = "users";
 const PAGE_USER = "user";
