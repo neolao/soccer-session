@@ -33,10 +33,15 @@ function getSession($filePath) {
     if (!isset($session["captains"])) {
         $session["captains"] = array();
     }
+    if (!isset($session["linkToBuyTicket"])) {
+        $session["linkToBuyTicket"] = null;
+    }
 
     $baseName = basename($filePath, ".json");
     $session["baseName"] = $baseName;
     $session["timestamp"] = strtotime($baseName);
+
+    deduplicateSessionPlayers($session);
 
     return $session;
 }

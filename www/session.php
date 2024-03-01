@@ -38,13 +38,13 @@ if (isAdmin($user) && isset($_POST["action"]) && $_POST["action"] === "delete") 
 // Handle form to close the session
 if (isAdmin($user) && isset($_POST["action"]) && $_POST["action"] === "close") {
     closeSession($session);
-    saveSession($sessionFilePath, json_encode($session, JSON_PRETTY_PRINT));
+    saveSession($sessionFilePath, $session);
 }
 
 // Handle form to open the session
 if (isAdmin($user) && isset($_POST["action"]) && $_POST["action"] === "open") {
     openSession($session);
-    saveSession($sessionFilePath, json_encode($session, JSON_PRETTY_PRINT));
+    saveSession($sessionFilePath, $session);
 }
 
 // Handle form to consume tickets
@@ -52,20 +52,26 @@ if (isAdmin($user) && isset($_POST["action"]) && $_POST["action"] === "consumeTi
     markPlayerTicketAsConsumed($session, $users);
     consumeTickets($session, $users);
     countCaptains($session, $users);
-    saveSession($sessionFilePath, json_encode($session, JSON_PRETTY_PRINT));
+    saveSession($sessionFilePath, $session);
     saveUsers($users);
+}
+
+// Handle form to add a player ticket
+if (isAdmin($user) && isset($_POST["action"]) && $_POST["action"] === "addTicket") {
+    addTicket($_POST["userId"]);
+    $users = getUsers();
 }
 
 // Handle form to mark guest ticket as paid
 if (isAdmin($user) && isset($_POST["action"]) && $_POST["action"] === "markGuestTicketAsPaid") {
     markGuestTicketAsPaid($session, $_POST["id"]);
-    saveSession($sessionFilePath, json_encode($session, JSON_PRETTY_PRINT));
+    saveSession($sessionFilePath, $session);
 }
 
 // Handle form to unmark guest ticket as paid
 if (isAdmin($user) && isset($_POST["action"]) && $_POST["action"] === "unmarkGuestTicketAsPaid") {
     unmarkGuestTicketAsPaid($session, $_POST["id"]);
-    saveSession($sessionFilePath, json_encode($session, JSON_PRETTY_PRINT));
+    saveSession($sessionFilePath, $session);
 }
 
 // Handle form to close session and consume tickets
@@ -74,49 +80,55 @@ if (isAdmin($user) && isset($_POST["action"]) && $_POST["action"] === "closeAndC
     markPlayerTicketAsConsumed($session, $users);
     consumeTickets($session, $users);
     countCaptains($session, $users);
-    saveSession($sessionFilePath, json_encode($session, JSON_PRETTY_PRINT));
+    saveSession($sessionFilePath, $session);
     saveUsers($users);
 }
 
 // Handle form to book
 if (isset($_POST["action"]) && $_POST["action"] === "book") {
     bookPlayer($session, $userId);
-    saveSession($sessionFilePath, json_encode($session, JSON_PRETTY_PRINT));
+    saveSession($sessionFilePath, $session);
 }
 if (isAdmin($user) && isset($_POST["action"]) && $_POST["action"] === "bookPlayer") {
     bookPlayer($session, $_POST["id"]);
-    saveSession($sessionFilePath, json_encode($session, JSON_PRETTY_PRINT));
+    saveSession($sessionFilePath, $session);
 }
 if (isAdmin($user) && isset($_POST["action"]) && $_POST["action"] === "addGuest") {
     bookGuest($session, $_POST["name"]);
-    saveSession($sessionFilePath, json_encode($session, JSON_PRETTY_PRINT));
+    saveSession($sessionFilePath, $session);
 }
 
 // Handle form to unbook
 if (isset($_POST["action"]) && $_POST["action"] === "unbook") {
     unbookPlayer($session, $userId);
-    saveSession($sessionFilePath, json_encode($session, JSON_PRETTY_PRINT));
+    saveSession($sessionFilePath, $session);
 }
 if (isAdmin($user) && isset($_POST["action"]) && $_POST["action"] === "unbookPlayer") {
     unbookPlayer($session, $_POST["id"]);
-    saveSession($sessionFilePath, json_encode($session, JSON_PRETTY_PRINT));
+    saveSession($sessionFilePath, $session);
 }
 
 // Handle form to mark/unmark a player as captain
 if (isAdmin($user) && isset($_POST["action"]) && $_POST["action"] === "markAsCaptain") {
     markPlayerAsCaptain($session, $_POST["id"]);
-    saveSession($sessionFilePath, json_encode($session, JSON_PRETTY_PRINT));
+    saveSession($sessionFilePath, $session);
 }
 if (isAdmin($user) && isset($_POST["action"]) && $_POST["action"] === "unmarkAsCaptain") {
     unmarkPlayerAsCaptain($session, $_POST["id"]);
-    saveSession($sessionFilePath, json_encode($session, JSON_PRETTY_PRINT));
+    saveSession($sessionFilePath, $session);
 }
 
 // Handle form to choose random captains
 if (isAdmin($user) && isset($_POST["action"]) && $_POST["action"] === "randomCaptains") {
     $includeGuests = (isset($_POST["includeGuests"]) && $_POST["includeGuests"] === "on");
     chooseRandomCaptains($session, $users, $includeGuests);
-    saveSession($sessionFilePath, json_encode($session, JSON_PRETTY_PRINT));
+    saveSession($sessionFilePath, $session);
+}
+
+// Handle form to set the link to buy ticket
+if (isAdmin($user) && isset($_POST["action"]) && $_POST["action"] === "setLinkToBuyTicket") {
+    setSessionLinkToBuyTicket($session, $_POST["link"]);
+    saveSession($sessionFilePath, $session);
 }
 
 // Header
@@ -195,6 +207,7 @@ for ($index = 0; $index < MAX_PLAYERS; $index++) {
                 echo '</form>';
             }
 
+
             // Mark guest ticket as paid
             if (isGuest($playerId)) {
                 if (getPlayerTickets($playerId, $users, $session) === 0) {
@@ -208,6 +221,16 @@ for ($index = 0; $index < MAX_PLAYERS; $index++) {
                     echo '<input type="hidden" name="action" value="unmarkGuestTicketAsPaid"/>';
                     echo '<input type="hidden" name="id" value="'.$playerId.'"/>';
                     echo '<input type="submit" value="💰" class="unmark-guest-ticket"/>';
+                    echo '</form>';
+                }
+            }
+            // Add ticket for a regular player
+            else {
+                if (getPlayerTickets($playerId, $users, $session) <= 0) {
+                    echo '<form action="" method="post">';
+                    echo '<input type="hidden" name="action" value="addTicket"/>';
+                    echo '<input type="hidden" name="userId" value="'.$playerId.'"/>';
+                    echo '<input type="submit" value="💰"/>';
                     echo '</form>';
                 }
             }
@@ -266,7 +289,9 @@ if ($session["status"] === SESSION_STATUS_OPEN && (count($players) < MAX_PLAYERS
         echo '</form>';
     }
 
-    if (isset($config["linkToBuyTicket"]) && !empty($config["linkToBuyTicket"])) {
+    if (isset($session["linkToBuyTicket"]) && !empty($session["linkToBuyTicket"])) {
+        echo '<span class="buy-ticket"><a href="'.$session["linkToBuyTicket"].'">Buy a ticket</a></span>';
+    } else if (isset($config["linkToBuyTicket"]) && !empty($config["linkToBuyTicket"])) {
         echo '<span class="buy-ticket"><a href="'.$config["linkToBuyTicket"].'">Buy a ticket</a></span>';
     }
     echo '</div>';
@@ -314,6 +339,22 @@ if (isAdmin($user)) {
     echo '</form>';
     echo '</div>';
     //*/
+
+    // Custom link to buy ticket
+    $currentLink = '';
+    if (isset($session["linkToBuyTicket"]) && !empty($session["linkToBuyTicket"])) {
+        $currentLink = $session["linkToBuyTicket"];
+    } else if (isset($config["linkToBuyTicket"]) && !empty($config["linkToBuyTicket"])) {
+        $currentLink = $config["linkToBuyTicket"];
+    }
+
+    echo '<div class="actions admin">';
+    echo '<form action="" method="post">';
+    echo '<input type="hidden" name="action" value="setLinkToBuyTicket"/>';
+    echo '<label><input type="text" name="link" value="'.$currentLink.'" required/></label>';
+    echo '<input type="submit" value="Set link to buy ticket"/>';
+    echo '</form>';
+    echo '</div>';
 
     // Add a guest
     echo '<div class="actions admin">';

@@ -1,4 +1,6 @@
 <?php
+include_once(__DIR__ . "/functions/deduplicateSessionPlayers.php");
+include_once(__DIR__ . "/functions/setSessionLinkToBuyTicket.php");
 include_once(__DIR__ . "/functions/addSession.php");
 include_once(__DIR__ . "/functions/getConfig.php");
 include_once(__DIR__ . "/functions/deleteSession.php");
